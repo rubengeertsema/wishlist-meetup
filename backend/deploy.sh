@@ -13,10 +13,8 @@ function deploy() {
     case "${NAMESPACE}" in
         prod)
             DIR=$(pwd)
-            cd ${DIR}/kubernetes && kubectl apply -f backend-ingress.yml -n prod
-            cd ${DIR}/kubernetes && kubectl apply -f backend-service.yml -n prod
-            cd ${DIR}/kubernetes && kubectl delete -f backend-deployment.yml -n prod > /dev/null 2>&1
-            cd ${DIR}/kubernetes && kubectl apply -f backend-deployment.yml -n prod
+            cd ${DIR}/kubernetes && kubectl delete -f backend.yml -n prod > /dev/null 2>&1
+            cd ${DIR}/kubernetes && kubectl apply -f backend.yml -n prod
             cd ${DIR}
             ;;
         help)

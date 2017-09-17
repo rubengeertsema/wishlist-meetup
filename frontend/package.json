@@ -5,8 +5,14 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "mocked": "ng serve --port 4230 --proxy-config ./proxy.config.json & node mock-server.js",
     "build": "ng build",
-    "build-prod": "ng build --prod",
+    "prod": "ng build --prod",
+    "docker-build": "eval $(minikube docker-env); docker build -t frontend:latest .",
+    "kube-apply": "kubectl apply -n prod -f kubernetes/frontend.yml",
+    "kube-delete": "kubectl delete -n prod -f kubernetes/frontend.yml",
+    "kube-deploy": "npm run prod && npm run docker-build && npm run kube-apply",
+    "kube-delete-deploy": "npm run kube-delete && npm run kube-deploy",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -50,6 +56,7 @@
     "karma-coverage-istanbul-reporter": "^1.3.0",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "ng-apimock": "^1.4.1",
     "protractor": "~5.1.2",
     "ts-node": "~3.2.1",
     "tslint": "~5.5.0",
