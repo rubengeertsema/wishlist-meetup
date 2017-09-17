@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "mocked": "ng serve --port 4230 --proxy-config ./proxy.config.json & node mock-server.js",
+    "mocked": "ng serve --proxy-config ./proxy.config.json & node mock-server.js",
     "build": "ng build",
     "prod": "ng build --prod",
     "docker-build": "eval $(minikube docker-env); docker build -t frontend:latest .",
