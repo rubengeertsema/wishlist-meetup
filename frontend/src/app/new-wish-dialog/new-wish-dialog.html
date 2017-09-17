@@ -1,0 +1,19 @@
+<div class="dialog">
+  <div class="dialog-header">
+    <h2 class="dialog-title">New Wish</h2>
+  </div>
+  <div class="dialog-body">
+    <form>
+      <md-input-container class="full-dialog-width">
+        <input mdInput placeholder="title" [(ngModel)]="title" name="title">
+      </md-input-container>
+      <md-input-container class="full-dialog-width">
+        <textarea mdInput mdTextareaAutosize placeholder="description" [(ngModel)]="description" name="description"></textarea>
+      </md-input-container>
+    </form>
+  </div>
+  <div class="dialog-footer">
+    <button md-raised-button (click)="postWish()">Post wish</button>
+    <button md-raised-button (click)="closeDialog()">Cancel</button>
+  </div>
+</div>

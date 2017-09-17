@@ -1,0 +1,61 @@
+#!groovy
+
+/**
+ * wishlist frontend pipeline
+ */
+
+def err = null
+currentBuild.result = "SUCCESS"
+
+properties([
+  buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '25')),
+  pipelineTriggers([pollSCM('H/5 * * * *')])
+])
+
+try {
+  String imageName = 'frontend'
+  String commitHash
+
+  node() {
+
+    echo "JENKINS_HOME = ${env.JENKINS_HOME}"
+    echo "WORKSPACE = ${env.WORKSPACE}"
+    echo "JOB_NAME = ${env.JOB_NAME}"
+    echo "BUILD_NUMBER = ${env.BUILD_NUMBER}"
+
+    stage('checkout') {
+      checkout scm
+      commitHash = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
+      echo "BRANCH_NAME = ${env.BRANCH_NAME}"
+    }
+
+    stage('install packages') {
+      sh 'npm install'
+    }
+
+    stage('linting') {
+      sh 'ng lint'
+    }
+
+    stage('build package') {
+      sh 'ng build --prod'
+    }
+
+    stage('check docker build') {
+      docker.build("${imageName}:${commitHash}")
+    }
+
+    stage('rollout frontend prod') {
+      sh "kubectl apply -n prod -f kubernetes/frontend-ingress.yml"
+      sh "kubectl apply -n prod -f kubernetes/frontend-service.yml"
+      sh "sed -r 's/(\\s+image:{1}.+:)(.+)/\\1${commitHash}/' kubernetes/frontend-deployment.yml | kubectl apply -n prod -f -"
+    }
+  }
+} catch (caughtError) {
+  err = caughtError
+  currentBuild.result = "FAILURE"
+} finally {
+  if (err) {
+    throw err
+  }
+}
