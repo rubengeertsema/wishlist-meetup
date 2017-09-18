@@ -1,19 +1,3 @@
 <md-list class="cardlist">
-  <md-card class="card" *ngFor="let wish of this.store.wishes; let i = index">
-    <md-card-header>
-      <md-card-title>
-        Title: {{wish.title | truncate : 20}}
-      </md-card-title>
-      <md-card-subtitle>
-        Date: {{wish.date| date : "dd/MM/yy H:mm"}}
-      </md-card-subtitle>
-    </md-card-header>
-    <md-card-content class="content">
-      <p>{{wish.description}}</p>
-    </md-card-content>
-    <md-card-actions>
-      <!--<button routerLink="/edit-wish" routerLinkActive="active" color="primary" md-raised-button>Edit</button>-->
-      <button color="warn" md-raised-button (click)="deleteWish(wish,i)">Delete</button>
-    </md-card-actions>
-  </md-card>
+  <app-wish *ngFor="let wish of this.store.wishes; let i = index" [wish]="wish" (emitDeleteEvent)="deleteWish($event, i)"></app-wish>
 </md-list>

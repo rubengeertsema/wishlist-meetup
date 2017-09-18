@@ -19,7 +19,7 @@ export class WishListComponent implements OnInit {
     this.store.getWhishes();
   }
 
-  deleteWish(wish: Wish, i: number) {
+  deleteWish(wish: Wish, i) {
     this.store.deleteWish(wish, i);
   }
 }

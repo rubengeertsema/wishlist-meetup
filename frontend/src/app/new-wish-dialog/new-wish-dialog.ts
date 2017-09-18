@@ -19,6 +19,7 @@ export class NewWishDialogComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // TODO: refactor to make the wishes in a better way
   postWish() {
     const wish = new Wish(null, this.title, this.description, null);
     this.store.addWish(wish);

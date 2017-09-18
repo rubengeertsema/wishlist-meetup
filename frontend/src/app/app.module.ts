@@ -17,6 +17,7 @@ import {EditWishComponent} from './edit-wish/edit-wish.component';
 import {NotFoundComponent} from './not-found/not-found.component';
 import {NavbarComponent} from './navbar/navbar.component';
 import {WishListComponent} from './wishlist/wishlist.component';
+import { WishComponent } from './wish/wish.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {WishListComponent} from './wishlist/wishlist.component';
     EditWishComponent,
     NotFoundComponent,
     NavbarComponent,
-    WishListComponent
+    WishListComponent,
+    WishComponent
   ],
   entryComponents: [
     NewWishDialogComponent
