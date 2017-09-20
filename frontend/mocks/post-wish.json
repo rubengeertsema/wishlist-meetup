@@ -1,10 +1,10 @@
 {
   "expression": "/backend/api",
   "method": "POST",
-  "name": "post-wish",
+  "name": "postWishes",
   "isArray": true,
   "responses": {
-    "validPost": {
+    "post": {
       "default": true,
       "status": 201,
       "headers": {

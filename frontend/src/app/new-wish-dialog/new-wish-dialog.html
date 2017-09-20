@@ -1,9 +1,10 @@
-<div class="dialog">
+<div class="dialog" id="newWishDialog">
   <div><h2>New Wish</h2></div>
   <div class="dialog-body">
     <form (ngSubmit)="postWish()" #wishForm="ngForm">
       <md-form-field class="full-dialog-width">
         <input
+          id="titleInput"
           maxlength="100"
           mdInput
           placeholder="title"
@@ -14,6 +15,7 @@
       </md-form-field>
       <md-form-field class="full-dialog-width">
         <textarea
+          id="descriptionInput"
           maxlength="300"
           mdAutosizeMaxRows="5"
           mdInput
