@@ -13,15 +13,17 @@ export class NewWishDialogComponent implements OnInit {
   title = '';
   description = '';
 
+  maxTitleLength = 100;
+  maxDescriptionLength = 300;
+
   constructor(public dialogRef: MdDialogRef<NewWishDialogComponent>, private store: WishListStore) {
   }
 
   ngOnInit(): void {
   }
 
-  // TODO: refactor to make the wishes in a better way
   postWish() {
-    const wish = new Wish(null, this.title, this.description, null);
+    const wish: Wish = new Wish(null, this.title, this.description, null);
     this.store.addWish(wish);
     this.dialogRef.close();
   }

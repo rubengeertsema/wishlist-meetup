@@ -1,19 +1,34 @@
 <div class="dialog">
-  <div class="dialog-header">
-    <h2 class="dialog-title">New Wish</h2>
-  </div>
+  <div><h2>New Wish</h2></div>
   <div class="dialog-body">
-    <form>
-      <md-input-container class="full-dialog-width">
-        <input mdInput placeholder="title" [(ngModel)]="title" name="title">
-      </md-input-container>
-      <md-input-container class="full-dialog-width">
-        <textarea mdInput mdTextareaAutosize placeholder="description" [(ngModel)]="description" name="description"></textarea>
-      </md-input-container>
+    <form (ngSubmit)="postWish()" #wishForm="ngForm">
+      <md-form-field class="full-dialog-width">
+        <input
+          maxlength="100"
+          mdInput
+          placeholder="title"
+          [(ngModel)]="title"
+          name="title"
+          required>
+        <md-hint align="end">{{title.length}} / {{maxTitleLength}}</md-hint>
+      </md-form-field>
+      <md-form-field class="full-dialog-width">
+        <textarea
+          maxlength="300"
+          mdAutosizeMaxRows="5"
+          mdInput
+          mdTextareaAutosize
+          placeholder="description"
+          [(ngModel)]="description"
+          name="description"
+          required>
+        </textarea>
+        <md-hint align="end">{{description.length}} / {{maxDescriptionLength}}</md-hint>
+      </md-form-field>
+      <div class="form-buttons">
+        <button type="submit" md-raised-button [disabled]="!wishForm.form.valid">Post wish</button>
+        <button md-raised-button (click)="closeDialog()">Cancel</button>
+      </div>
     </form>
-  </div>
-  <div class="dialog-footer">
-    <button md-raised-button (click)="postWish()">Post wish</button>
-    <button md-raised-button (click)="closeDialog()">Cancel</button>
   </div>
 </div>

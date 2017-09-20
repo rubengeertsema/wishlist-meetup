@@ -2,11 +2,6 @@
   font-family: Roboto, "Helvetica Neue", sans-serif;
   display: flex;
   flex-direction: column;
-  max-height: 40em;
-}
-
-.dialog-header{
-  /*add styling*/
 }
 
 .dialog-body {
@@ -16,4 +11,8 @@
 
 .full-dialog-width {
   width: 100%;
+}
+
+.form-buttons {
+  margin-bottom: 1em;
 }
