@@ -8,7 +8,7 @@
           placeholder="title"
           id="titleInput"
           name="title"
-          maxlength="100"
+          maxlength={{maxTitleLength}}
           [(ngModel)]="title"
           required>
         <md-hint align="end">{{title.length}} / {{maxTitleLength}}</md-hint>
@@ -19,8 +19,8 @@
           placeholder="description"
           id="descriptionInput"
           name="description"
-          maxlength="300"
-          [mdAutosizeMinRows]="5"
+          maxlength={{maxDescriptionLength}}
+          mdAutosizeMinRows="5"
           mdAutosizeMaxRows="8"
           mdTextareaAutosize
           [(ngModel)]="description"
