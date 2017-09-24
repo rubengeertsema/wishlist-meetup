@@ -1,28 +1,29 @@
 <div class="dialog" id="newWishDialog">
   <div><h2>New Wish</h2></div>
   <div class="dialog-body">
-    <form (ngSubmit)="postWish()" #wishForm="ngForm">
+    <form (ngSubmit)="wishForm.form.valid && postWish()" #wishForm="ngForm">
       <md-form-field class="full-dialog-width">
         <input
-          id="titleInput"
-          maxlength="100"
           mdInput
           placeholder="title"
-          [(ngModel)]="title"
+          id="titleInput"
           name="title"
+          maxlength="100"
+          [(ngModel)]="title"
           required>
         <md-hint align="end">{{title.length}} / {{maxTitleLength}}</md-hint>
       </md-form-field>
       <md-form-field class="full-dialog-width">
         <textarea
-          id="descriptionInput"
-          maxlength="300"
-          mdAutosizeMaxRows="5"
           mdInput
-          mdTextareaAutosize
           placeholder="description"
-          [(ngModel)]="description"
+          id="descriptionInput"
           name="description"
+          maxlength="300"
+          [mdAutosizeMinRows]="5"
+          mdAutosizeMaxRows="8"
+          mdTextareaAutosize
+          [(ngModel)]="description"
           required>
         </textarea>
         <md-hint align="end">{{description.length}} / {{maxDescriptionLength}}</md-hint>

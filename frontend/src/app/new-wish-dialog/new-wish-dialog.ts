@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MdDialogRef} from '@angular/material';
+
 import {WishListStore} from '../common/store/wishlist.store';
 import {Wish} from '../common/models/wish.model';
 
@@ -12,11 +13,11 @@ export class NewWishDialogComponent implements OnInit {
 
   title = '';
   description = '';
-
   maxTitleLength = 100;
   maxDescriptionLength = 300;
 
-  constructor(public dialogRef: MdDialogRef<NewWishDialogComponent>, private store: WishListStore) {
+  constructor(public dialogRef: MdDialogRef<NewWishDialogComponent>,
+              private store: WishListStore) {
   }
 
   ngOnInit(): void {

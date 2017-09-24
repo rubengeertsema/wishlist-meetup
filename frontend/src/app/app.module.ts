@@ -3,8 +3,17 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
-import {MdButtonModule, MdCardModule, MdDialog, MdDialogModule, MdIconModule, MdInputModule, MdListModule, MdMenuModule,
-  MdToolbarModule} from '@angular/material';
+import {
+  MdButtonModule,
+  MdCardModule,
+  MdDialog,
+  MdDialogModule,
+  MdIconModule,
+  MdInputModule,
+  MdListModule,
+  MdMenuModule,
+  MdToolbarModule
+} from '@angular/material';
 import 'hammerjs';
 
 import {AppComponent} from './app.component';
@@ -15,7 +24,7 @@ import {TruncatePipe} from './pipes/truncate';
 import {AppRoutingModule} from './app-routing.module';
 import {NavbarComponent} from './navbar/navbar.component';
 import {WishListComponent} from './wishlist/wishlist.component';
-import { WishComponent } from './wish/wish.component';
+import {WishComponent} from './wish/wish.component';
 
 @NgModule({
   declarations: [
