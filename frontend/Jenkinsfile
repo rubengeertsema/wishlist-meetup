@@ -37,6 +37,10 @@ try {
       sh 'ng lint'
     }
 
+    stage('run protractor tests') {
+      sh 'npm run e2e-headless'
+    }
+
     stage('build package') {
       sh 'ng build --prod'
     }
