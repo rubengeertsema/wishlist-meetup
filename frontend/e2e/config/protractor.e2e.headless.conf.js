@@ -7,8 +7,7 @@ config.multiCapabilities = [
             args: [
                 'disable-infobars',
                 '--headless',
-                '--disable-gpu',
-                '--window-size=800x600'
+                '--disable-gpu'
             ]
         },
         shardTestFiles: true,

@@ -46,9 +46,7 @@ try {
     }
 
     stage('rollout frontend prod') {
-      sh "kubectl apply -n prod -f kubernetes/frontend-ingress.yml"
-      sh "kubectl apply -n prod -f kubernetes/frontend-service.yml"
-      sh "sed -r 's/(\\s+image:{1}.+:)(.+)/\\1${commitHash}/' kubernetes/frontend-deployment.yml | kubectl apply -n prod -f -"
+      sh "sed -r 's/(\\s+image:{1}.+:)(.+)/\\1${commitHash}/' kubernetes/frontend.yml | kubectl apply -n prod -f -"
     }
   }
 } catch (caughtError) {

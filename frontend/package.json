@@ -45,6 +45,9 @@
   "devDependencies": {
     "@angular/cli": "1.2.4",
     "@angular/compiler-cli": "^4.3.1",
+    "@types/chai": "^4.0.4",
+    "@types/chai-as-promised": "7.1.0",
+    "@types/cucumber": "^2.0.3",
     "@types/hammerjs": "^2.0.34",
     "@types/jasmine": "2.5.53",
     "@types/node": "~8.0.14",

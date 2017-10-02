@@ -1,8 +1,5 @@
-import {by, element} from 'protractor';
+import {$, ElementFinder} from 'protractor';
 
 export class AppNavbarPo {
-
-  public static async clickMenuButton() {
-    await element(by.id('menuButton')).click();
-  }
+  public static menuButton: ElementFinder = $('#menuButton');
 }

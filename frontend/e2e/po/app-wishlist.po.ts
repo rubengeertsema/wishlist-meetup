@@ -1,6 +1,5 @@
-import {by, element} from 'protractor';
+import {$$, ElementArrayFinder} from 'protractor';
 
-// TODO: add all logic
 export class AppWishlistPo {
-
+  public static wishes: ElementArrayFinder = $$('app-wish');
 }
