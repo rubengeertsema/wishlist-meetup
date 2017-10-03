@@ -14,6 +14,7 @@
     "kube-deploy": "npm run prod && npm run docker-build && npm run kube-apply",
     "kube-delete-deploy": "npm run kube-delete && npm run kube-deploy",
     "test": "ng test",
+    "test-headless": "ng test --browsers ChromeHeadless --watch=false --code-coverage",
     "lint": "ng lint",
     "e2e": "ng e2e --proxy-config proxy.config.json",
     "e2e-headless": "ng e2e --config e2e/config/protractor.e2e.headless.conf.js --proxy-config proxy.config.json"
@@ -66,6 +67,7 @@
     "karma-htmlfile-reporter": "~0.3",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "karma-junit-reporter": "^1.2.0",
     "ng-apimock": "^1.4.1",
     "protractor": "^5.1.2",
     "protractor-cucumber-framework": "^4.0.4",

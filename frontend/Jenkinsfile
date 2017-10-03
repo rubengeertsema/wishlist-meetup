@@ -33,6 +33,16 @@ try {
       sh 'npm install'
     }
 
+    stage('unit test with coverage') {
+      try {
+        sh 'npm run test-headless'
+      } finally {
+        junit allowEmptyResults: false, testResults: 'reports/unit/*.xml'
+        publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'reports/unit', reportFiles: 'testresults.html', reportName: 'Unit Test Report'])
+        publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'reports/coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report'])
+      }
+    }
+
     stage('linting') {
       sh 'npm run lint'
     }
