@@ -64,8 +64,8 @@ try {
     }
 
     /**
-     * Note: make sure to put milestones outside the Jenkins "node" block to free up Jenkins executor slots. Otherwise,
-     * these slots keep being occupied eventually blocking new Jenkins jobs.
+     * Make sure to put milestones outside the Jenkins "node" block to free up Jenkins executor slots. Otherwise, these
+     * slots keep being occupied eventually blocking new Jenkins jobs.
      */
     stage('promote-prod') {
       milestone()
@@ -75,6 +75,7 @@ try {
 
     node() {
       stage('rollout frontend prod') {
+        // Change the line [image: frontend:latest] into [image: frontend:commitHash] and pipe the result to kubctl
         sh "sed -r 's/(\\s+image:{1}.+:)(.+)/\\1${commitHash}/' kubernetes/frontend.yml | kubectl apply -n prod -f -"
       }
     }
