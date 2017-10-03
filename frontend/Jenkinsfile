@@ -1,7 +1,7 @@
 #!groovy
 
 /**
- * wishlist frontend pipeline
+ * WishList multi branch frontend pipeline
  */
 
 def err = null
@@ -34,29 +34,56 @@ try {
     }
 
     stage('linting') {
-      sh 'ng lint'
+      sh 'npm run lint'
     }
 
     stage('run protractor tests') {
-      sh 'npm run e2e-headless'
+      try {
+        sh 'npm run e2e-headless'
+      } finally {
+        step([$class: 'CucumberReportPublisher', jsonReportDirectory: "reports/e2e/json"])
+      }
     }
 
-    stage('build package') {
-      sh 'ng build --prod'
+    if (env.BRANCH_NAME != 'master') {
+      stage('check build docker') {
+        docker.build("${imageName}")
+      }
+    }
+  }
+
+  if (env.BRANCH_NAME == 'master') {
+    node() {
+      stage('build package') {
+        sh 'npm run prod'
+      }
+
+      stage('build docker') {
+        docker.build("${imageName}:${commitHash}")
+      }
     }
 
-    stage('check docker build') {
-      docker.build("${imageName}:${commitHash}")
+    /**
+     * Note: make sure to put milestones outside the Jenkins "node" block to free up Jenkins executor slots. Otherwise,
+     * these slots keep being occupied eventually blocking new Jenkins jobs.
+     */
+    stage('promote-prod') {
+      milestone()
+      input "Promote ${commitHash} to prod?"
+      milestone()
     }
 
-    stage('rollout frontend prod') {
-      sh "sed -r 's/(\\s+image:{1}.+:)(.+)/\\1${commitHash}/' kubernetes/frontend.yml | kubectl apply -n prod -f -"
+    node() {
+      stage('rollout frontend prod') {
+        sh "sed -r 's/(\\s+image:{1}.+:)(.+)/\\1${commitHash}/' kubernetes/frontend.yml | kubectl apply -n prod -f -"
+      }
     }
   }
 } catch (caughtError) {
   err = caughtError
   currentBuild.result = "FAILURE"
 } finally {
+  // You may want to add build result notifications here (e.g. mail, slack notify, etc.)
   if (err) {
     throw err
   }
