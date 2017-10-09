@@ -63,6 +63,16 @@ try {
   }
 
   if (env.BRANCH_NAME == 'master') {
+    node() {
+      stage('build package') {
+        sh 'npm run prod'
+      }
+
+      stage('build docker') {
+        docker.build("${imageName}:${commitHash}")
+      }
+    }
+
     /**
      * Make sure to put milestones outside the Jenkins "node" block to free up Jenkins executor slots. Otherwise, these
      * slots keep being occupied eventually blocking new Jenkins jobs.
@@ -74,14 +84,6 @@ try {
     }
 
     node() {
-      stage('build package') {
-        sh 'npm run prod'
-      }
-
-      stage('build docker') {
-        docker.build("${imageName}:${commitHash}")
-      }
-
       stage('rollout frontend prod') {
         // Change the line [image: frontend:latest] into [image: frontend:commitHash] and pipe the result to kubctl
         sh "sed -r 's/(\\s+image:{1}.+:)(.+)/\\1${commitHash}/' kubernetes/frontend.yml | kubectl apply -n prod -f -"
