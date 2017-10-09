@@ -5,7 +5,7 @@ Feature: Delete wishes
   So I can clearly see which wishes need my focus
 
   Background:
-    Given six wishes
+    Given "6" wishes
 
   Scenario: Delete a wish
     When I delete a wish

@@ -4,7 +4,12 @@ Feature: Add wishes
   I want to be able to save my wishes to a list
   So I can look them up once I forget them
 
-  Scenario: Add a wish
-    Given six wishes
+  Scenario Outline: Add a wish
+    Given "<initial>" wishes
     When I add a new wish
-    Then there are "7" wishes displayed
+    Then there are "<result>" wishes displayed
+
+    Examples:
+      | initial | result |
+      | 6       | 7      |
+      | 0       | 1      |
