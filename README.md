@@ -64,17 +64,25 @@ within the Jenkins container running on Kubernetes with `kubectl`.
 Lastly, exit the Jenkins container (run the command `exit`).
 
 ### 8) List services
-Services can be seen as virtual ip's. Kubernetes uses them to manage traffic between pods. Use `kubectl` to list all 
-services. In the output you will see a port mapping, e.g. `8080:30312/TCP`. The second port number can be used to access 
-a deployment from outside. This might look like a good solution but be aware this will not work when scaling up to 
-multiple micro services (we will solve this issue in the next step with an ingress). 
+Services can be seen as virtual ip's. Kubernetes uses them to manage traffic between pods. Now Use `kubectl` to list all 
+services. 
 
-Try to access jenkins from the value you found.
+In the output you will see a port mapping, e.g. `8080:30312/TCP`. The second port number is the node-port and can be 
+used to access a deployment from outside. Try to open Jenkins in a web browser with the found port number.
  
+Hint: use http://<minikube-ip>/<node-port>/jenkins
 
 ### 9) List ingresses
+An ingress is used to expose a service to a context path. For example, in this meetup we have mapped the jenkins service
+to the context path `/jenkins`. Now Jenkins is accessible on http://$(minikube ip)/jenkins.
+
+Now use `kubectl` to list all ingresses in the `tools` namespace.
 
 ### 10) Describe ingress
+Use `kubectl` to find the context path for gitlab. Notice that you can also see the backend it is connecting to. Now 
+open gitlab in a web browser.
+
+Hint: use `kubectl describe <resource-type> <ingress-name>`. Also use the correct namespace.
 
 ### 11) Traefik
 Traefik (pronounced like traffic) is an HTTP reverse proxy and load balancer (also see [traefik](https://traefik.io/)).
@@ -82,6 +90,14 @@ In this meetup we use it to manage all traffic to the outside world. Traefik als
 running (micro) services. Try to find and open this dashboard in a browser.
 
 Hint: use `kubectl` to list all services and look for the external ip and port.
+
+
+### All pieces together
+The connections between all the Kubernetes resources described in the previous steps above can be simply summarized in 
+the diagram below.
+
+[outside world] -- [traefik] -- [ingress] -- [service] -- [application instance 1, 2, ....n]
+                                                      
 
 ## DEPLOY BACKEND
 
