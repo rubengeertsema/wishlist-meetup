@@ -38,7 +38,7 @@ npm and ng-cli versions.
 The first stage in the Jenkins build pipeline is to install all packages. For now do this locally by running 
 `npm install`.
 
-### 3) Run unit tests with coverage
+### 3) Run unit tests
 Karma is used for the frontend unit tests. For this meetup 
 we have only one simple test [unit test](./frontend/src/app/app.component.spec.ts) and do not focus on writing extra 
 unit tests (but feel free to add some).
@@ -100,7 +100,7 @@ Now run the unit tests only once in headless mode by providing the `watch` flag 
 `--browsers <browser-name-as-configured-in-the-Karma-conf>`.
 
 ### 5) Run unit tests with code coverage
-Measuring code coverage and acting accordingly is an important part of Continuous Delivery. Because of the continuous
+Measuring code coverage and acting accordingly is an important part of Continuous Deployment. Because of the continuous
 deployment to production we need to have confidence in our code. During this meetup we use a tool called Istanbul to
 measure the code coverage. The Istanbul settings are also configured in the 
 [karma configuration](./frontend/karma.conf.js). Notice the part below:
@@ -142,7 +142,7 @@ Call the script: `test-headless`. Test if it works by running the script (`npm r
 ### 7) Linting
 Linting can be described as checking your code on errors or bad design. To increase our confidence in our code quality 
 we also should at this step to the build pipeline. For now execute linting locally with the npm lint script present in 
-the `package.json`
+the `package.json`. See if all files pass linting.
 
 ### 8) e2e testing
 For the e2e tests we use protractor with cucumber to support BDD. We mocked the backend by using 
@@ -160,7 +160,7 @@ Now add a npm script to the package.json that can be used in the Jenkins build p
 tests). Call the script: `e2e-headless`.Test if it works by running the script.
 
 ### 10) Build prod package
-Part of the pipeline will be building a production package of the frontend application. Do so by running the npm scipt
+Part of the pipeline will be building a production package of the frontend application. Do so by running the npm script
 `npm run prod`. If all went well you should see a folder named [dist](./frontend/dist).
 
 ### 11) Build docker image
@@ -169,14 +169,14 @@ Before we can deploy to Kubernetes, we need to build a docker image. Do so by ru
 machine by running the command `docker images`.
 
 ### 12) Add npm script for building the docker image
-Add a npm script to the package.json for building the docker image. Call it `docker-build`.
+Add a npm script to the package.json for building the docker image. Call it `docker-build`. Test it out.
 
 ### 13) Deploy the frontend to kubernetes
 Now deploy the frontend to kubernetes by using the kubernetes 
 [frontend deployment descriptor](./frontend/kubernetes/frontend.yml). Make sure to deploy it to the `prod` namespace.
 Check if the frontend is up and running in the Kubernetes dashboard and open the frontend in a browser.
 
-Note: use the `kubectl apply` command to deploy.
+Note: use the `kubectl apply` command to deploy to kuberneters.
 Note: remember that traefik exposes the frontend to the outside world. so you only have to find the external ip
 for traefik. Navigate to that ip in a browser to see the frontend.
 
