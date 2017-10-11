@@ -17,7 +17,7 @@ build pipeline (part 3). These stages are:
 The frontend has been build with `Angular 4+` and has been started with the `angular-cli`. For unit testing `Karma` is 
 used. For the e2e testing we use `Protractor` with `CucumberJs` and `chai` with `chai-as-promised`.
 
-For more information see the below links:
+For more information consult the links below:
 * https://angular.io/
 * https://cli.angular.io/
 * https://karma-runner.github.io/1.0/index.html
@@ -46,7 +46,8 @@ unit tests (but feel free to add some).
 * First make sure to have the latest google chrome browser installed
 * Try to run the unit tests with the `ng test` command. Also try to run it with the npm script defined in the 
 package.json. We will use these scripts eventually in the pipeline. 
-* Now run it with the flag  `--watch=false`. What happened and why is this important for the automated build pipeline?
+* Now run the `ng` command with the flag  `--watch=false`. What happened and why is this important for the automated 
+build pipeline?
 
 Note: test results can be viewed in the [reports](./frontend/reports) folder. Test reporting is configured in the 
 [karma configuration](./frontend/karma.con. Notice the part below:
@@ -75,10 +76,10 @@ reporters: config.angularCli && config.angularCli.codeCoverage
 ### 4) Run unit tests headless
 Since we will run our tests in a Jenkins pipeline we will need to deal with the fact that there is no screen available 
 for the browser. In the past we needed to solve this issue with screen virtualization or by using browsers like 
-phantomJs. Luckily google made life a lot easier by providing a headless mode in there google chrome stable version.
+phantomJs. Luckily google made life a lot easier by providing a headless mode in their google chrome stable version.
 
 To be able to run the unit tests headless in chrome we have configured Karma accordingly. See the 
-[karma configuration](./frontend/karma.conf.js). Notice the below part.
+[karma configuration](./frontend/karma.conf.js). Notice the part below:
 
 ```
 browsers: ['Chrome', 'ChromeHeadless'],
@@ -95,3 +96,67 @@ browsers: ['Chrome', 'ChromeHeadless'],
     }
 ```
 
+Now run the unit tests only once in headless mode by providing the `watch` flag and the flag 
+`--browsers <browser-name-as-configured-in-the-Karma-conf>`.
+
+### 5) Run unit tests with code coverage
+Measuring code coverage and acting accordingly is an important part of Continuous Delivery. Because of the continuous
+deployment to production we need to have confidence in our code. During this meetup we use a tool called Istanbul to
+measure the code coverage. The Istanbul settings are also configured in the 
+[karma configuration](./frontend/karma.conf.js). Notice the part below:
+```
+coverageIstanbulReporter: {
+      reports: ['html', 'lcovonly', 'json'],
+      dir: path.join(__dirname, 'reports/coverage'),
+      fixWebpackSourcePaths: true,
+      thresholds: { // These thresholds need to be much higher but is out of scope for this meetup/tutorial
+        global: { // thresholds for all files
+          statements: 60,
+          lines: 60,
+          branches: 40,
+          functions: 20
+        },
+        each: { // thresholds per file
+          statements: 30,
+          lines: 30,
+          branches: 0,
+          functions: 10
+        }
+      }
+    }
+``` 
+Note: since we have only one unit test during this meetup we have set the thresholds extremely low. In real life that
+should not be allowed.
+
+Now run the unit tests headless, only once and with code coverage by using the flag `--code-coverage`. You can find
+the code coverage report in the [reports](./frontend/reports) folder.
+
+### 6) Add unit test script to package.json for the build pipeline
+Now add a npm script to the package.json that can be used in the Jenkins build pipeline. Make sure it will run:
+* only once
+* headless
+* with code coverage
+
+Call the script: `test-headless`. Test if it works by running the script.
+
+### 7) Linting
+Linting can be described as checking your code on errors or bad design. To increase our confidence in our code quality 
+we also should at this step to the build pipeline. For now execute linting locally with the npm lint script present in 
+the `package.json`
+
+### 8) e2e testing
+For the e2e tests we use protractor with cucumber to support BDD. We mocked the backend by using 
+[ng-apimock](https://github.com/mdasberg/grunt-ng-apimock), a great tool for mocking. Run the e2e tests with the 
+command `ng e2e --proxy-config proxy.config.json`.
+
+Also here we need to run the tests headless (same reason as for the unit tests). To make this possible we have 
+configured chrome headless in the [protractor configuration](./frontend/e2e/config).
+
+Now run the protractor tests headless by adding the flag `--config e2e/config/protractor.e2e.headless.conf.js`. You can 
+find the e2e test report in the [reports](./frontend/reports) folder.
+
+### 9) Add e2e test script to package.json for the build pipeline
+Now add a npm script to the package.json that can be used in the Jenkins build pipeline (same as you did for the unit 
+tests). Call the script: `e2e-headless`.Test if it works by running the script.
+
+### 10) Build docker image
