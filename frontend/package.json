@@ -8,16 +8,9 @@
     "mocked": "ng serve --proxy-config ./proxy.config.json & node mock-server.js",
     "build": "ng build",
     "prod": "ng build --prod",
-    "docker-build": "eval $(minikube docker-env); docker build -t frontend:latest .",
-    "kube-apply": "kubectl apply -n prod -f kubernetes/frontend.yml",
-    "kube-delete": "kubectl delete -n prod -f kubernetes/frontend.yml",
-    "kube-deploy": "npm run prod && npm run docker-build && npm run kube-apply",
-    "kube-delete-deploy": "npm run kube-delete && npm run kube-deploy",
     "test": "ng test",
-    "test-headless": "ng test --browsers ChromeHeadless --watch=false --code-coverage",
     "lint": "ng lint",
     "e2e": "ng e2e --proxy-config proxy.config.json",
-    "e2e-headless": "ng e2e --config e2e/config/protractor.e2e.headless.conf.js --proxy-config proxy.config.json"
   },
   "private": true,
   "dependencies": {

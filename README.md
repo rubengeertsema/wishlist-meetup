@@ -137,7 +137,7 @@ Now add a npm script to the package.json that can be used in the Jenkins build p
 * headless
 * with code coverage
 
-Call the script: `test-headless`. Test if it works by running the script.
+Call the script: `test-headless`. Test if it works by running the script (`npm run <script-name>`).
 
 ### 7) Linting
 Linting can be described as checking your code on errors or bad design. To increase our confidence in our code quality 
@@ -159,4 +159,30 @@ find the e2e test report in the [reports](./frontend/reports) folder.
 Now add a npm script to the package.json that can be used in the Jenkins build pipeline (same as you did for the unit 
 tests). Call the script: `e2e-headless`.Test if it works by running the script.
 
-### 10) Build docker image
+### 10) Build prod package
+Part of the pipeline will be building a production package of the frontend application. Do so by running the npm scipt
+`npm run prod`. If all went well you should see a folder named [dist](./frontend/dist).
+
+### 11) Build docker image
+Before we can deploy to Kubernetes, we need to build a docker image. Do so by running the command 
+`eval $(minikube docker-env); docker build -t frontend:latest .`. Check if it is present on the minikube virtual
+machine by running the command `docker images`.
+
+### 12) Add npm script for building the docker image
+Add a npm script to the package.json for building the docker image. Call it `docker-build`.
+
+### 13) Deploy the frontend to kubernetes
+Now deploy the frontend to kubernetes by using the kubernetes 
+[frontend deployment descriptor](./frontend/kubernetes/frontend.yml). Make sure to deploy it to the `prod` namespace.
+Check if the frontend is up and running in the Kubernetes dashboard and open the frontend in a browser.
+
+Note: use the `kubectl apply` command to deploy.
+Note: remember that traefik exposes the frontend to the outside world. so you only have to find the external ip
+for traefik. Navigate to that ip in a browser to see the frontend.
+
+### 14) Add npm script for deployment to kubernetes
+Add a npm script for deployment to kubernetes. Call it `kube-apply`. Test it out. You could also add a npm script to 
+delete the deployment from kubernetes.
+
+## END part 2
+Now we have all the steps ready to build our automated pipeline. Check out the branch for part 3.
