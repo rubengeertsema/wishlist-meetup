@@ -1,6 +1,0 @@
-<md-list class="cardlist">
-  <app-wish
-    *ngFor="let wish of this.store.wishes; let i = index" [wish]="wish"
-    (emitDeleteEvent)="deleteWish($event, i)">
-  </app-wish>
-</md-list>
