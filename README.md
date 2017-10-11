@@ -184,5 +184,5 @@ for traefik. Navigate to that ip in a browser to see the frontend.
 Add a npm script for deployment to kubernetes. Call it `kube-apply`. Test it out. You could also add a npm script to 
 delete the deployment from kubernetes.
 
-## END part 2
+## END PART 2
 Now we have all the steps ready to build our automated pipeline. Check out the branch for part 3.
