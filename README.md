@@ -23,8 +23,8 @@ If not already done, start your local Kubernetes environment as described here:
 [minikube-meetup](https://github.com/rubengeertsema/minikube-meetup).
 
 ### 2) Kubernetes dashboard
-The dev-tools Jenkins and Gitlab are running on the local Kubernetes environment. Try to find these tools in the 
-Kubernetes dashboard.
+The dev-tools `Jenkins` and `Gitlab` are running on the local Kubernetes environment. Try to find these tools in the 
+Kubernetes dashboard. Use `minikube --help` to find the command to open the dashboard.
 
 ### 3) List all docker images running on minikube
 Use the terminal to list all docker images and containers running on minikube (hint: to do so, you need to switch 
@@ -104,8 +104,8 @@ As mentioned before, the backend has a mongodb for persistence and a spring-boot
 the outside world. In this part we will deploy these components to Kubernetes.
 
 ### 1) Deployment descriptor
-A deployment descriptor can be used to easily mange deployments to Kubernetes. For the backend you can take a look at
-[backend deployment descriptor file](./backend/kubernetes/backend.yml). Notice we have configured the following:
+A deployment descriptor can be used to easily mange deployments to Kubernetes. For the backend you can take a look at 
+the [backend deployment descriptor file](./backend/kubernetes/backend.yml). Notice we have configured the following:
 
 * Ingress
 * Service
@@ -163,29 +163,33 @@ Use `kubectl` to deploy the backend to the Kubernetes namespace called `prod`.
 Hint: use `kubectl apply` for this.
 
 ### 7) Delete backend
-Now use `kubectl` to delete the deployment.
+Now use `kubectl` to delete the deployment. Check the dashboard to see if all went well.
 
 Hint: use `kubectl delete` for this.
 
 ### 8) Re-deploy backend 
-Re-deploy the backend micro-service and open the traefik dashboard to see whether it is listed there.
+Re-deploy the backend micro-service and open the dashboard to see if all went well. You can also check the traefik 
+dashboard. It should also be listed there.
 
 ### 9) Auto-healing
-In the Kubernetes dashboard go to the `pods` section (namespace prod). Try to kill the backend micro service by deleting 
+In the Kubernetes dashboard go to the `pods` section (namespace prod). Try to kill the backend micro-service by deleting 
 pods. You will find out this is not possible. Kubernetes will automatically heal itself to match the configured 
 configuration (that's awesome!).
+
+Note: there are even games on the market where you can do pod shooting. Goal is to defeat Kubernetes :)
 
 ### 10) Scale backend
 We configured to run 2 backend instances by default. You can see this in the backend deployment descriptor 
 [backend deployment descriptor file](./backend/kubernetes/backend.yml)(the option replicas). Try to scale up to 3 
 instances via the Kubernetes dashboard. Also check the traefik dashboard to see the new backend instance listed there. 
-Be easy on your laptop and do not scale up to much. Just keep it with 3 instances. Now scale back to two instances.
+Be easy on your laptop and do not scale up to much. Just keep it with 3 instances. Afterwards, scale back to two 
+instances.
 
 Hint: you can do this in the `Deployments` section. 
 
 ### 11) Check if the backend is functioning
-As mentioned before the backend is a spring-boot micro-service connected to a MongoDB. Do a rest call to the backend. 
-Use the commands below.
+As mentioned before the backend is a spring-boot micro-service connected to a MongoDB. Do a rest call to the backend 
+api to see if it is functioning. Use the commands below.
 * Post a wish: 
 ```
 curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"description": "test description","title": "test title"}' http://$(minikube ip)/backend/api
@@ -198,7 +202,8 @@ curl -X GET http://$(minikube ip)/backend/api
 ```
 curl -X DELETE http://$(minikube ip)/backend/api
 ```
-Note: you can also test the backend through the swagger-ui. Try to find how to get there and test the api with swagger.
+
+You can also test the backend through the swagger-ui. Try to find how to get there and test the api with swagger.
 Also see: http://springfox.github.io/springfox/docs/current/#springfox-swagger-ui
 
 ## END PART 1
