@@ -18,7 +18,7 @@ Links:
 * https://kubernetes.io/docs/user-guide/kubectl-cheatsheet/
 * https://docs.docker.com/engine/reference/commandline/docker/
 
-### 1) Spin up the environment.
+### 1) Spin-up environment
 If not already done, start your local Kubernetes environment as described here: 
 [minikube-meetup](https://github.com/rubengeertsema/minikube-meetup).
 
@@ -100,8 +100,10 @@ the diagram below.
                                                       
 
 ## DEPLOY BACKEND
+As mentioned before, the backend has a mongodb for persistence and a spring-boot micro service exposing a REST api to
+the outside world. In this part we will deploy these components to Kubernetes.
 
-### 1) View deployment descriptor
+### 1) Deployment descriptor
 A deployment descriptor can be used to easily mange deployments to Kubernetes. For the backend you can take a look at
 [backend deployment descriptor file](./backend/kubernetes/backend.yml). Notice we have configured the following:
 
@@ -111,14 +113,14 @@ A deployment descriptor can be used to easily mange deployments to Kubernetes. F
 
 Here the ingress will handle the traffic to the outside world (managed by traefik). The ingress does so by mapping the
 path `/backend` to the specified service called `backend`. The service handles the internal traffic to the backend pods.
-This mechanism makes it possible to scale pods in case we need to handle lots of traffic. Of course we need to make our 
+This mechanism makes it possible to scale pods in case we need to handle lots of traffic. Of course we need to build our 
 micro-services stateless. Otherwise things will get out of sync. 
 
-### 2) Deploy mongo
+### 2) Deploy mongodb
 The same mechanism as described in the previous step accounts for the mongodb that will be used for persistence. Take a 
 look at the [mongodb deployment descriptor](./mongo/kubernetes/mongo.yml). As you can see, we did not define an ingress 
-for mongodb. We did so, because the database does not need to be exposed to the outside world (the backend microservice
-will connect to the database).
+for mongodb. We did so, because the database does not need to be exposed to the outside world (the micro service will 
+connect to the database).
 
 Note: in production you would most likely never put your persistence in a container. Imagine the container crashing...
 Kubernetes has solutions for this, however that is out of scope for this meetup.
@@ -126,16 +128,23 @@ Kubernetes has solutions for this, however that is out of scope for this meetup.
 Use `kubectl` to deploy mongodb to the Kubernetes namespace called `prod`.
 
 ### 3) Check mongo logging
-Check in the backend if the deployment
+You can use the Kubernetes dashboard to check the container logging. Try to find out if the deployment of mongodb
+succeeded. The mongodb logging should state something like 
+`2017-10-11T09:33:44.601+0000 I NETWORK  [thread1] waiting for connections on port 27017`.
+
+Hint: go to `pods -> mongo`
 
 ### 4) Build backend jar
-Go to the backend dir and build the backend by running:
+Now we are ready to actually build our backend package. Go to the backend dir and build the backend by running:
 ```
 ./mvnw clean install
 ```
 
+Note: you need to have the Java 8 SDK installed for this.
+
 ### 5) Build backend docker
-Go to the backend dir and build the backend docker image by running the command:
+Now we can build a docker image containing the backend package. Go to the backend dir and build the backend docker image 
+by running the below command. Make sure to build on the minikube docker daemon.
 ```
 docker build -t backend:latest .
 ```
@@ -145,27 +154,36 @@ deploy from our locally listed docker images. Since we use minikube, we need to 
 the minikube docker daemon. Otherwise the image wont be present on the minikube virtual machine and thus cannot be 
 deployed to the cluster.
 
+Now check if the image is present on the minikube docker environment by running `docker images`. It should be listed 
+there.
+
 ### 6) Deploy backend
 Use `kubectl` to deploy the backend to the Kubernetes namespace called `prod`.
 
+Hint: use `kubectl apply` for this.
+
 ### 7) Delete backend
-```
-kubectl delete -f backend/kubernetes/backend.yml -n prod 
-```
+Now use `kubectl` to delete the deployment.
+
+Hint: use `kubectl delete` for this.
 
 ### 8) Re-deploy backend 
+Re-deploy the backend micro-service and open the traefik dashboard to see whether it is listed there.
 
-
-### 9) Auto-healing: Remove running pod 
-
+### 9) Auto-healing
+In the Kubernetes dashboard go to the `pods` section (namespace prod). Try to kill the backend micro service by deleting 
+pods. You will find out this is not possible. Kubernetes will automatically heal itself to match the configured 
+configuration (that's awesome!).
 
 ### 10) Scale backend
+We configured to run 2 backend instances by default. You can see this in the backend deployment descriptor 
+[backend deployment descriptor file](./backend/kubernetes/backend.yml)(the option replicas). Try to scale up to 3 
+instances via the Kubernetes dashboard. Also check the traefik dashboard to see the new backend instance listed there. 
+Be easy on your laptop and do not scale up to much. Just keep it with 3 instances. Now scale back to two instances.
 
+Hint: you can do this in the `Deployments` section. 
 
-### 11) Show backend logging
-Open the kubernetes dashboard and go to:  
-
-### 12) Check if the backend is up and running
+### 11) Check if the backend is functioning
 As mentioned before the backend is a spring-boot micro-service connected to a MongoDB. Do a rest call to the backend. 
 Use the commands below.
 * Post a wish: 
@@ -182,3 +200,7 @@ curl -X DELETE http://$(minikube ip)/backend/api
 ```
 Note: you can also test the backend through the swagger-ui. Try to find how to get there and test the api with swagger.
 Also see: http://springfox.github.io/springfox/docs/current/#springfox-swagger-ui
+
+## END PART 1
+Now we have a basic understanding of Kubernetes. Lets move on to the next part! Check out the next git branch where we
+will focus on the WishList frontend.
