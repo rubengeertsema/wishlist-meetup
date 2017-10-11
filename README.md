@@ -190,15 +190,18 @@ Hint: you can do this in the `Deployments` section.
 ### 11) Check if the backend is functioning
 As mentioned before the backend is a spring-boot micro-service connected to a MongoDB. Do a rest call to the backend 
 api to see if it is functioning. Use the commands below.
-* Post a wish: 
+
+Post a wish: 
 ```
 curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"description": "test description","title": "test title"}' http://$(minikube ip)/backend/api
 ```
-* Get all wishes: 
+
+Get all wishes: 
 ```
 curl -X GET http://$(minikube ip)/backend/api
 ```
-* Delete all wishes:
+
+Delete all wishes:
 ```
 curl -X DELETE http://$(minikube ip)/backend/api
 ```
