@@ -70,7 +70,7 @@ services.
 In the output you will see a port mapping, e.g. `8080:30312/TCP`. The second port number is the node-port and can be 
 used to access a deployment from outside. Try to open Jenkins in a web browser with the found port number.
  
-Hint: use http://<minikube-ip>/<node-port>/jenkins
+Hint: use http://minikube-ip/node-port/jenkins
 
 ### 9) List ingresses
 An ingress is used to expose a service to a context path. For example, in this meetup we have mapped the jenkins service
